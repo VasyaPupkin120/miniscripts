@@ -39,13 +39,14 @@ const_C45_9Y = [
 
 systems = const_RHG_40 + const_C45_9Y
 chat_dir = pathlib.Path(path_to_eve_chats)
-path_to_last_intel_chat = sorted(chat_dir.glob(f"*{basename_intel_chat}*"))[-1]
 previous_request = set()
 count_num = 1
 is_first_run = True
 
 while True:
     time.sleep(2)
+    # путь к файлу пересчитывается для того, чтобы парсер работал при смене твинка на том же аккаунте
+    path_to_last_intel_chat = sorted(chat_dir.glob(f"*{basename_intel_chat}*"))[-1]
     # кодировка у файла - именно utf-16-le
     # каждое из предложений чата помещается внутрь множества, так как может 
     # в течение одного цикла чтения прийти несколько новых предложений,
