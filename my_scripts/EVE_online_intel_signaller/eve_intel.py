@@ -4,40 +4,44 @@
 """
 import pathlib
 import time
+import json
 # for play sounds - pip3 install playsound
 import playsound
 
-path_to_eve_chats = "/home/eve/logs/Chatlogs"
-basename_intel_chat = "ZERG_INTEL"
 
-#Constellation RHG-4O
-const_RHG_40 = [
-    "5P-AIP", 
-    "GHZ-SJ", 
-    "K-J50B", 
-    "NLO-3Z", 
-    "P8-BKO", 
-    "R4K-8L", 
-    "RIT-A7", 
-]
-
-#Constellation C45-9Y
-const_C45_9Y = [
-    "5XR-KZ", 
-    "75C-WN", 
-    "BG-W90", 
-    "C-0ND2", 
-    "I5Q2-S", 
-    "JI-LGM", 
-    "OCU4-R", 
-    "PO-3QW", 
-    "VF-FN6", 
-    "Y-YGMW",
-    "Z-PNIA", 
-]
+def is_sistems_in_sentence(sentence:str):
+    """
+    Проверяет наличие системы из списка в предложении
+    """
+    for system in systems:
+        if system in sentence:
+            return True
+    return False
 
 
-systems = const_RHG_40 + const_C45_9Y
+def is_clear_words_not_in_sentence(sentence:str):
+    """
+    Проверяет отсутствие слов, указывающих на то что
+    система пустая.
+    """
+    for word in clear_words:
+        if word in sentence:
+            return False
+    return True
+
+
+# подгрузка пути, имени чата, списка парсируемых систем, списка слов-отчетов об отсутствии
+with open("conf.json") as f:
+    conf_f = json.load(f)
+path_to_eve_chats = conf_f["path_to_eve_chats"]
+basename_intel_chat = conf_f["basename_intel_chat"]
+clear_words = conf_f["clear_words"]
+consts = conf_f["systems"].keys()
+systems = []
+for const in consts:
+    systems.extend(conf_f["systems"][f"{const}"])
+
+# иницализация
 chat_dir = pathlib.Path(path_to_eve_chats)
 previous_request = set()
 count_num = 1
@@ -61,11 +65,10 @@ while True:
             is_first_run = False
             continue
         for sentence in difference:
-            for system in systems:
-                if system in sentence:
-                    print(difference)
-                    print("ALERT! HIDE SHIP! (Тревога! Бди свой жёпь!)")
-                    playsound.playsound("alert.mp3")
+            if is_sistems_in_sentence(sentence) and is_clear_words_not_in_sentence(sentence):
+                print(difference)
+                print("ALERT! HIDE SHIP! (Тревога! Бди свой жёпь!)")
+                playsound.playsound("alert.mp3", block=False)
         previous_request = current_request
 
     count_num += 1

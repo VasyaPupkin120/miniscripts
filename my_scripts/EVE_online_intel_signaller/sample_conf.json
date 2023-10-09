@@ -1,0 +1,29 @@
+{
+    "systems": {
+        "const_I89_EP": [
+            "4-HWWF", 
+            "4GYV-Q", 
+            "8TPX-N", 
+            "PM-DWE", 
+            "WBR5-R", 
+            "YMJG-4" 
+        ],
+        "const_XJ_0RG": [
+            "37S-KO", 
+            "40GX-P", 
+            "4J9-DK", 
+            "A-GPTM", 
+            "HQ-TDJ", 
+            "WBLF-0" 
+        ]
+    },
+    "basename_intel_chat": "some_name_intel",
+    "path_to_eve_chats": "/home/eve/logs/Chatlogs",
+    "clear_words": [
+        "clr",
+        "сдк",
+        "чисто",
+        "никого",
+        "пусто"
+    ]
+}
